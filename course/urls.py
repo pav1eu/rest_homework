@@ -7,7 +7,6 @@ from course.views import (
     LessonUpdateAPIView,
     LessonDestroyAPIView,
     LessonRetrieveAPIView,
-    PaymentListView,
 )
 from course.apps import CourseConfig
 
@@ -26,7 +25,6 @@ urlpatterns = [
     path(
         "lessons/<int:pk>/update/", LessonUpdateAPIView.as_view(), name="lesson-update"
     ),
-    path("payments/", PaymentListView.as_view(), name="payment-list"),
 ]
 
 urlpatterns += router.urls
