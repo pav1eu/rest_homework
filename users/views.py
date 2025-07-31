@@ -7,6 +7,7 @@ from users.models import Payment, User
 from users.serializer import PaymentSerializer, UserSerializer
 from rest_framework.generics import CreateAPIView
 
+
 # Create your views here.
 class PaymentListView(generics.ListAPIView):
     queryset = Payment.objects.all()
@@ -26,6 +27,7 @@ class UserCreateAPIView(CreateAPIView):
         user = serializer.save(is_active=True)
         user.set_password(user.password)
         user.save()
+
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()

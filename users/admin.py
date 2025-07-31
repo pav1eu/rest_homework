@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 
 from users.models import User, Payment
 
+
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     ordering = ("email",)
@@ -10,16 +11,30 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ("email",)
 
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('phone', 'city', 'avatar')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        ('Important dates', {'fields': ('last_login',)}),
+        (None, {"fields": ("email", "password")}),
+        ("Personal info", {"fields": ("phone", "city", "avatar")}),
+        (
+            "Permissions",
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                )
+            },
+        ),
+        ("Important dates", {"fields": ("last_login",)}),
     )
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2'),
-        }),
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "password1", "password2"),
+            },
+        ),
     )
 
 
@@ -27,4 +42,3 @@ class CustomUserAdmin(UserAdmin):
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ("user", "payed_course", "payed_lesson", "payment_method")
     list_filter = ("user",)
-

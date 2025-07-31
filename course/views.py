@@ -18,9 +18,9 @@ class CourseViewSet(ModelViewSet):
     serializer_class = CourseSerializer
 
     def get_permissions(self):
-        if self.action in ['update', 'retrieve', 'list']:
+        if self.action in ["update", "retrieve", "list"]:
             self.permission_classes = [IsAuthenticated, IsModerator | IsAdminUser]
-        elif self.action in ['create', 'destroy']:
+        elif self.action in ["create", "destroy"]:
             self.permission_classes = [IsAuthenticated, IsAdminUser]
         else:
             self.permission_classes = [IsAuthenticated]
@@ -44,18 +44,20 @@ class LessonListAPIView(ListAPIView):
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerator]
 
+
 class LessonRetrieveAPIView(RetrieveAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerator, IsOwner]
+
 
 class LessonUpdateAPIView(UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerator, IsOwner]
 
+
 class LessonDestroyAPIView(DestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerator, IsOwner]
-
