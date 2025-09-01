@@ -1,3 +1,4 @@
+from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -5,6 +6,29 @@ from course.models import Course, Lesson
 
 
 # Create your models here.
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('У пользователя должен быть email')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if not extra_fields.get('is_staff'):
+            raise ValueError('У суперпользователя is_staff должен быть True')
+        if not extra_fields.get('is_superuser'):
+            raise ValueError('У суперпользователя is_superuser должен быть True')
+
+        return self.create_user(email, password, **extra_fields)
+
+
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True, verbose_name="email address")
@@ -15,6 +39,8 @@ class User(AbstractUser):
     avatar = models.ImageField(
         upload_to="users/avatars", null=True, blank=True, verbose_name="avatar"
     )
+
+    objects = CustomUserManager()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -60,3 +86,15 @@ class Payment(models.Model):
         blank=True,
         verbose_name="Вид оплаты",
     )
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscriptions')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='subscriptions')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['user', 'course']
+
+    def __str__(self):
+        return f'{self.user.email} → {self.course.title}'
