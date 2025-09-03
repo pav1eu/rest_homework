@@ -42,7 +42,7 @@ class CourseViewSet(ModelViewSet):
 class LessonCreateAPIView(CreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    #permission_classes = [IsAuthenticated, IsModerator]
+    permission_classes = [IsAuthenticated, IsModerator]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -51,28 +51,28 @@ class LessonCreateAPIView(CreateAPIView):
 class LessonListAPIView(ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonDetailSerializer
-   # permission_classes = [IsAuthenticated, IsModerator]
+    permission_classes = [IsAuthenticated, IsModerator]
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         user = self.request.user
         if user.groups.filter(name="Модераторы").exists():
-            return Course.objects.all()
-        return Course.objects.filter(owner=user)
+            return Lesson.objects.all()
+        return Lesson.objects.filter(owner=user)
 
 class LessonRetrieveAPIView(RetrieveAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    #permission_classes = [IsAuthenticated, IsModerator, IsOwner]
+    permission_classes = [IsAuthenticated, IsModerator, IsOwner]
 
 
 class LessonUpdateAPIView(UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    #permission_classes = [IsAuthenticated, IsModerator, IsOwner]
+    permission_classes = [IsAuthenticated, IsModerator, IsOwner]
 
 
 class LessonDestroyAPIView(DestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    #permission_classes = [IsAuthenticated, IsModerator, IsOwner]
+    permission_classes = [IsAuthenticated, IsModerator, IsOwner]
