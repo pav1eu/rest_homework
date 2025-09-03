@@ -10,14 +10,15 @@ class LessonSerializer(ModelSerializer):
     class Meta:
         model = Lesson
         exclude = ("owner",)
-        # validators = [
-        #     YoutubeOnlyValidator(field='video_url')
-        # ]
+        validators = [
+            YoutubeOnlyValidator(field='video_url')
+        ]
 
 
 class CourseSerializer(ModelSerializer):
     lesson_count = serializers.SerializerMethodField()
     lessons = LessonSerializer(many=True, source="lesson_set")
+    is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
@@ -35,5 +36,5 @@ class CourseSerializer(ModelSerializer):
 
 class LessonDetailSerializer(ModelSerializer):
     class Meta:
-        model = Course
+        model = Lesson
         fields = "__all__"
